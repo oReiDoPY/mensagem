@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Web</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-output" id="chat-output">
+            <!-- Mensagens serão exibidas aqui -->
+        </div>
+        <input type="text" id="message-input" placeholder="Digite sua mensagem...">
+        <button id="send-button">Enviar</button>
+    </div>
+
+    <!-- Modal para definir o nome do usuário -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span id="close" class="close-button">&times;</span>
+            <p>Informe seu nome:</p>
+            <input type="text" id="username-input" />
+            <button id="set-username-button">Confirmar</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        
+      // Conectar-se ao servidor WebSocket
+      var socket = io();
+
+      // Ouvinte para o evento 'chat message'
+      socket.on('chat message', function (msg) {
+        $('#messages').append($('<li>').text(msg));
+      });
+
+      // Manipulador de evento para o botão de envio
+      $('form').submit(function () {
+        socket.emit('chat message', $('#message').val());
+        $('#message').val('');
+        return false;
+      });
+    </script>
+</body>
+</html>
