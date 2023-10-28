@@ -14,7 +14,14 @@ function showModal() {
 }
 
 // Event listener para exibir o modal quando a página carregar
-document.addEventListener('DOMContentLoaded', showModal);
+document.addEventListener('DOMContentLoaded', () => {
+    showModal();
+
+    // Event listener para fechar o modal ao clicar no botão "X"
+    close.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+});
 
 setUsernameButton.addEventListener('click', () => {
     username = usernameInput.value;
@@ -25,21 +32,15 @@ setUsernameButton.addEventListener('click', () => {
 });
 
 sendButton.addEventListener("click", () => {
-  const message = messageInput.value;
-  if (message.trim() !== "") {
-      // Verifica se o remetente da mensagem é o mesmo que está enviando
-      if (username !== socket.username) {
-          displayMessage(username, message);
-      }
-      socket.emit('chat message', { username, message });
-      messageInput.value = "";
-  }
-});
-
-
-// Event listener para fechar o modal ao clicar no botão "X"
-close.addEventListener('click', () => {
-    modal.style.display = 'none';
+    const message = messageInput.value;
+    if (message.trim() !== "") {
+        // Verifica se o remetente da mensagem é o mesmo que está enviando
+        if (username !== socket.username) {
+            displayMessage(username, message);
+        }
+        socket.emit('chat message', { username, message });
+        messageInput.value = "";
+    }
 });
 
 function displayMessage(username, message) {
